@@ -1,5 +1,6 @@
 // src/data/maps.ts
 export const outsideMap = {
+  name: 'Outside',
   tiles: [
   [1,1,1,1,1,1,1,1,1,1],
   [1,0,0,0,0,0,0,0,2,1],
@@ -40,10 +41,15 @@ export const outsideMap = {
       targetX: 2,
       targetY: 1,
     }
+  ],
+  items: [
+    { id: 'apple', x: 1, y: 2 },
+    { id: 'banana', x: 4, y: 6 }
   ]
 };
 
 export const insideMap = {
+  name: 'Inside House',
   tiles: [
     [1,1,1,1,1],
     [2,0,0,0,1],
@@ -58,15 +64,17 @@ export const insideMap = {
       targetX: 8,
       targetY: 1,
     }
-  ]
+  ],
+  items: []
 };
 
 export const forestMap = {
+  name: 'Forest',
   tiles: [
     [1,1,1,1,1],
     [1,0,0,2,1], // Door at x=3, y=1 (already exists)
     [1,0,1,0,1],
-    [1,0,0,0,1],
+    [1,0,3,0,1],
     [1,1,1,1,1],
   ],
   doors: [
@@ -77,11 +85,21 @@ export const forestMap = {
       targetMap: 'outside',
       targetX: 5, // Return to x=5, y=8 on outsideMap
       targetY: 8,
+    },
+    {
+      id: 'game-end',
+      x: 2,
+      y: 3,
+      targetMap: '', // or null if you prefer
+      targetX: 0,
+      targetY: 0,
     }
-  ]
+  ],
+  items: []
 };
 
 export const caveMap = {
+  name: 'Cave',
   tiles: [
     [1,1,1,1,1],
     [1,2,0,0,1], // Door at x=1, y=1 (already exists)
@@ -98,7 +116,8 @@ export const caveMap = {
       targetX: 5, // Return to x=4, y=7 on outsideMap
       targetY: 3,
     }
-  ]
+  ],
+  items: []
 };
 
 export const maps = {

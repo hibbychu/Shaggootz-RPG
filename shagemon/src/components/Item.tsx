@@ -1,4 +1,3 @@
-// src/components/Item.tsx
 import React from 'react';
 
 const TILE_SIZE = 32;

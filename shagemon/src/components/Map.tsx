@@ -29,7 +29,7 @@ export const Map: React.FC<MapProps> = ({ map }) => (
             top: y * TILE_SIZE,
             width: TILE_SIZE,
             height: TILE_SIZE,
-            background: tile === 1 ? '#444' : tile === 2 ? '#aaf' : '#9f6',
+            background: tile === 1 ? '#444' : tile === 2 ? '#aaf' : tile === 3 ? '#e5f' : '#9f6',
             boxSizing: 'border-box',
             border: '1px solid #aaa',
           }}
