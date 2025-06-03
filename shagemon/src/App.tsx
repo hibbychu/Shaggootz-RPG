@@ -1,34 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { mapData } from './data/map';
+import { maps } from './data/maps';
 import { Map } from './components/Map';
 import { Player } from './components/Player';
-import { Item } from './components/Item';
 
-const initialItems = [
-  { id: 1, x: 3, y: 2 },
-  { id: 2, x: 6, y: 4 },
-  { id: 3, x: 7, y: 7 },
-];
-
-function isWalkable(x: number, y: number) {
-  return mapData[y] && mapData[y][x] === 0;
-}
+type MapKey = keyof typeof maps; // Automatically gets all map keys (e.g., 'outside', 'inside', 'forest')
 
 const START_POS = { x: 1, y: 1 };
 
 function App() {
+  const [currentMapKey, setCurrentMapKey] = useState<MapKey>('outside');
   const [pos, setPos] = useState(START_POS);
-  const [items, setItems] = useState(initialItems);
   const [score, setScore] = useState(0);
+
+  // Check if a tile is walkable (0 or door tile 2)
+  function isWalkable(x: number, y: number) {
+    const map = maps[currentMapKey];
+    return map.tiles[y]?.[x] !== 1; // Allow walking on 0 (walkable) and 2 (door)
+  }
 
   function handleMove(newX: number, newY: number) {
     if (!isWalkable(newX, newY)) return;
+
     setPos({ x: newX, y: newY });
 
-    const foundItem = items.find(item => item.x === newX && item.y === newY);
-    if (foundItem) {
-      setItems(items.filter(item => item.id !== foundItem.id));
-      setScore(score + 1);
+    // Check for door
+    const door = maps[currentMapKey].doors.find(d => d.x === newX && d.y === newY);
+    if (door) {
+      setCurrentMapKey(door.targetMap as MapKey); // Use MapKey type here
+      setPos({ x: door.targetX, y: door.targetY });
     }
   }
 
@@ -43,11 +42,11 @@ function App() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [pos, items, score]);
+  }, [pos, currentMapKey]); // Add currentMapKey to dependencies
 
   return (
     <div>
-      <div style={{
+      <div style={{ 
         width: 320,
         margin: '0 auto',
         textAlign: 'center',
@@ -56,14 +55,12 @@ function App() {
         color: '#222',
         marginBottom: 8,
       }}>
-        Score: {score}
+        <div>Coordinates: X: {pos.x}, Y: {pos.y}</div>
+        <div>Score: {score}</div>
       </div>
       <div style={{ position: 'relative', width: 320, height: 288 }}>
-        <Map />
+        <Map map={maps[currentMapKey]} />
         <Player x={pos.x} y={pos.y} />
-        {items.map(item => (
-          <Item key={item.id} x={item.x} y={item.y} />
-        ))}
       </div>
     </div>
   );

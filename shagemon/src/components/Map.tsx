@@ -1,20 +1,26 @@
 import React from 'react';
-import { mapData } from '../data/map';
+
+interface MapProps {
+  map: {
+    tiles: number[][];
+    // doors?: Array<{ x: number; y: number }>; // if you want to use doors here
+  };
+}
 
 const TILE_SIZE = 32;
 
-export const Map: React.FC = () => (
+export const Map: React.FC<MapProps> = ({ map }) => (
   <div
     style={{
       position: 'relative',
-      width: mapData[0].length * TILE_SIZE,
-      height: mapData.length * TILE_SIZE,
+      width: map.tiles[0].length * TILE_SIZE,
+      height: map.tiles.length * TILE_SIZE,
       border: '2px solid #222',
       background: '#cde',
     }}
   >
-    {mapData.map((row, y) =>
-      row.map((tile, x) => (
+    {map.tiles.map((row: number[], y: number) =>
+      row.map((tile: number, x: number) => (
         <div
           key={`${x}-${y}`}
           style={{
@@ -23,7 +29,7 @@ export const Map: React.FC = () => (
             top: y * TILE_SIZE,
             width: TILE_SIZE,
             height: TILE_SIZE,
-            background: tile === 1 ? '#444' : '#9f6',
+            background: tile === 1 ? '#444' : tile === 2 ? '#aaf' : '#9f6',
             boxSizing: 'border-box',
             border: '1px solid #aaa',
           }}
